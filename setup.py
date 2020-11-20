@@ -17,7 +17,7 @@ version = {}
 with open("./VCFDataFrame/__init__.py", "r") as v:
     exec(v.read(), version)
 # Requirements
-requirements = ["numpy", "pandas"]
+requirements = ["cyvcf2", "numpy", "pandas"]
 
 
 # SETUP #
