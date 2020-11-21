@@ -5,25 +5,38 @@
 # Copyright (c) 2020, Juan Carlos Vázquez
 # License: MIT
 #   Full Text: github.com/juancgvazquez/MODApy-VCFDataFrame/blob/master/LICENSE
+import os
+import pathlib
 
 from setuptools import find_packages, setup
 
 # EXTERNAL DATA
 # Description
-with open("./README.md", "r") as f:
+PATH = pathlib.Path(os.path.abspath(os.path.dirname(__file__)))
+
+with open(PATH / "README.md", "r") as f:
     long_description = f.read()
+
 # Version
-version = {}
-with open("./VCFDataFrame/__init__.py", "r") as v:
-    exec(v.read(), version)
+with open(PATH / "VCFDataFrame" / "__init__.py") as fp:
+    for line in fp.readlines():
+        if line.startswith("__version__ = "):
+            VERSION = line.split("=", 1)[-1].replace('"', "").strip()
+            break
+
 # Requirements
-requirements = ["cyvcf2", "numpy", "pandas"]
-
-
+REQS = [
+    "pandas",
+    "numpy",
+    "cython",
+    "cyvcf2",
+    "matplotlib",
+    "matplotlib-venn",
+]
 # SETUP #
 setup(
     name="VCFDataFrame",
-    version=version["__version__"],
+    version=VERSION,
     author=["Juan Carlos Vázquez"],
     author_email="juancgvazquez@gmail.com",
     description="Package to work with Variant Calling Format Files",
@@ -31,7 +44,7 @@ setup(
     long_description_content_type="text/markdown",
     url="https://github.com/juancgvazquez/MODApy-VCFDataFrame/",
     license="MIT",
-    install_requires=requirements,
+    install_requires=REQS,
     packages=find_packages(),
     keywords=["bioinformatics", "genomics", "vcf", "pandas"],
     classifiers=[
