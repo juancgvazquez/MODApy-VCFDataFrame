@@ -27,11 +27,11 @@ def _load_vcf(vcf):
         raise TypeError("argument must be a string, path to a VCF File")
     if not vcf.lower().endswith(".vcf"):
         raise TypeError("filepath must end with .vcf")
-    if not os.exists(vcf):
+    if not os.path.exists(vcf):
         raise FileNotFoundError("File not found in vcf path")
     logging.info(f"Parsing VCF File: {vcf}")
     vcf_reads = cyvcf2.Reader(vcf)
-    if vcf_reads.samples > 0:
+    if len(vcf_reads.samples) > 0:
         name = vcf_reads.samples[0]
     else:
         name = vcf.split("/")[-1]
@@ -65,4 +65,16 @@ def _load_vcf(vcf):
     vcf_df.index = vcf_df.index.str.split("+", expand=True)
     vcf_df.index.names = ["CHROM", "POS", "REF", "ALT"]
     vcf_df.reset_index(inplace=True)
-    return vcf_df, name
+    return vcf_df, name, vcf_reads
+
+
+def _load_panel(panel):
+    try:
+        paneldf = pd.ExcelFile(panel).parse("GeneList")
+        gene_symbol_list = list(paneldf.GeneSymbol.unique())
+    except Exception as err:
+        raise Exception(
+            f"There was an error parsing GeneList.\
+                        Error was: {err}"
+        )
+    return gene_symbol_list
