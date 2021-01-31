@@ -24,10 +24,13 @@ def _load_vcf(vcf):
         Sample Name
     """
     if not isinstance(vcf, str):
+        logging.error(f"Received argument was {vcf}.")
         raise TypeError("argument must be a string, path to a VCF File")
     if not vcf.lower().endswith(".vcf"):
+        logging.error(f"Received argument was {vcf}.")
         raise TypeError("filepath must end with .vcf")
     if not os.path.exists(vcf):
+        logging.error(f"Received argument was {vcf}.")
         raise FileNotFoundError("File not found in vcf path")
     logging.info(f"Parsing VCF File: {vcf}")
     vcf_reads = cyvcf2.Reader(vcf)

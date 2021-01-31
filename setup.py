@@ -27,6 +27,8 @@ with open(PATH / "VCFDataFrame" / "__init__.py") as fp:
 # Requirements
 REQS = [
     "pandas",
+    "xlrd",
+    "joblib",
     "numpy",
     "cython",
     "cyvcf2",
